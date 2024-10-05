@@ -24,23 +24,3 @@ function eventManager:on(eventFunction)
         eventFunction(...)
     end)
 end
-
-function eventManager:hooks()
-    local __ = {
-        ['refreshAllEvent'] = function()
-            local eventCount = 0
-            for i = 1, #InterneEvent do
-                local event = InterneEvent[i]
-                local t = {}
-                eventCount = eventCount + 1
-                t[event] = eventCount
-                if #t <= 0 then
-                    return
-                end
-
-                RegisterNetEvent(event, function()
-                end)
-            end
-        end
-    }
-end

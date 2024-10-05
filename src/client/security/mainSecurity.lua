@@ -141,4 +141,17 @@ if CFG.Active.GlobalAc then
 
     end
 
+    if CFG.Active.SpawnEntity then
+        if CFG.Active.RemoveEntity then
+            function DeleteSafeVehicle(entity)
+                local entityId = GetSafeVehicleId(entity)
+                if entityId == nil then
+                    DeleteEntity(entity)
+                end
+
+
+            end
+        end
+    end
+
 end

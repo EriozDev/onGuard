@@ -5,6 +5,7 @@ CFG.DEVMOD = true -- Don't tuch
 CFG.Active = {
     GlobalAc = true,
     SpawnEntity = true,
+    RemoveEntity = true,
     GodMod = true,
     Invisible = true,
     AntiTriggersEvent = true
