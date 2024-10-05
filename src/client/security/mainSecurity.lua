@@ -65,8 +65,27 @@ if CFG.Active.GlobalAc then
         end)
     end
 
+    -- [[ ANTI INVISIBLE VEHICLE ]] --
+    if CFG.Active.VehicleInvisible then
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                if not PlayerLoaded then goto skip end
+
+                local PlayerPedId = PlayerPedId()
+                local vehicle = GetVehiclePedIsIn(PlayerPedId, false)
+
+                if GetEntityAlpha(vehicle) == 0 or not IsEntityVisible(vehicle) then
+                    onGuard.TriggerServer('onGuard:detect:vehicleInvisible')
+                end
+                :: skip ::
+            end
+        end)
+    end
+
+    -- [[ ANTI SPAWN ENTITY ]] --
     if CFG.Active.SpawnEntity then
-        -- [[ ANTI SPAWN ENTITY ]] --
         local registeredVehicles = {}
         local VehicleId = 0
 

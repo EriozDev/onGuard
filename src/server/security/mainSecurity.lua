@@ -44,5 +44,17 @@ if CFG.Active.GlobalAc then
             src ..
             '] (' .. ide .. ') Attempt to RemoveE ntity.')
     end)
+
+    onGuard.OnNet('onGuard:detect:vehicleInvisible', function()
+        local src = source;
+        local name = GetPlayerName(src);
+        local ide = GetPlayerIdentifierByType(src, 'license');
+
+        LOG.OnGuard('Player => ' ..
+            name ..
+            ' [' ..
+            src ..
+            '] (' .. ide .. ') Attempt to InvisibleMod for vehicle.')
+    end)
     --
 end
