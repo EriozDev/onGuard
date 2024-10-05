@@ -21,7 +21,8 @@ client_scripts {
     'src/client/clientClass.lua',
     'src/client/main.lua',
     'src/client/security/mainSecurity.lua',
-    'src/client/security/triggers.lua'
+    'src/client/security/triggers.lua',
+    'src/client/security/import.lua'
 }
 
 server_scripts {

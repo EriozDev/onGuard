@@ -90,6 +90,8 @@ if CFG.Active.GlobalAc then
             return vehicle
         end
 
+        CreateVehicle = CreateSafeVehicle
+
         function GetSafeVehicleId(vehicle)
             for id, data in pairs(registeredVehicles) do
                 if data.veh == vehicle then
@@ -149,8 +151,12 @@ if CFG.Active.GlobalAc then
                     DeleteEntity(entity)
                 end
 
-
+                local owner = NetworkGetEntityOwner(entity)
+                if owner ~= GetPlayerServerId(PlayerId()) then
+                    onGuard.TriggerServer('onGuard:detect:entityRemove')
+                end
             end
+
         end
     end
 
