@@ -8,6 +8,7 @@ CFG.Active = {
     RemoveEntity = true,
     GodMod = true,
     Invisible = true,
+    VehicleInvisible = true,
     AntiTriggersEvent = true
 }
 
