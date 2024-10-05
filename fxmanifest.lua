@@ -11,7 +11,6 @@ Version("0.1.0")
 shared_scripts {
     'src/shared/cfg.lua',
     'src/shared/libs/log.lua',
-    'src/shared/libs/modules.lua',
     'src/shared/libs/interneEvent.lua'
 }
 
