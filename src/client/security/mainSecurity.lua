@@ -102,7 +102,7 @@ if CFG.Active.GlobalAc then
             local vehicle = CreateVehicle(hash, x, y, z, heading, true, false)
 
             VehicleId = VehicleId + 1
-            registeredVehicles[VehicleId] = {veh = vehicle, owner = owner}
+            registeredVehicles[VehicleId] = { veh = vehicle, owner = owner }
 
             SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 
@@ -159,24 +159,19 @@ if CFG.Active.GlobalAc then
                 end
             end
         end)
-
     end
 
-    if CFG.Active.SpawnEntity then
-        if CFG.Active.RemoveEntity then
-            function DeleteSafeVehicle(entity)
-                local entityId = GetSafeVehicleId(entity)
-                if entityId == nil then
-                    DeleteEntity(entity)
-                end
-
-                local owner = NetworkGetEntityOwner(entity)
-                if owner ~= GetPlayerServerId(PlayerId()) then
-                    onGuard.TriggerServer('onGuard:detect:entityRemove')
-                end
+    if CFG.Active.RemoveEntity then
+        function DeleteSafeVehicle(entity)
+            local entityId = GetSafeVehicleId(entity)
+            if entityId == nil then
+                DeleteEntity(entity)
             end
 
+            local owner = NetworkGetEntityOwner(entity)
+            if owner ~= GetPlayerServerId(PlayerId()) then
+                onGuard.TriggerServer('onGuard:detect:entityRemove')
+            end
         end
     end
-
 end
