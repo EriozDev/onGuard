@@ -1,4 +1,8 @@
 onGuard = {}
+onGuard.C = {
+    _C = {}
+}
+
 local serverCallbacks = {}
 
 function onGuard.TriggerClient(_eventName, target, ...)
@@ -36,24 +40,6 @@ function onGuard.generateToken()
     end
 
     return token
-end
-
-function onGuard.C(enf)
-    local _C = {}
-    if enf == nil then
-        return
-    end
-
-    local seed = onGuard.generateToken()
-    if seed == nil then
-        return
-    end
-
-    _C[enf] = seed
-    for i = 1, #_C do
-        local sd = _C[i]
-        --TODO CRYPTAGE FUNCS
-    end
 end
 
 function onGuard.unSynchronise(t, cb)
