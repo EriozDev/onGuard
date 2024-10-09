@@ -161,6 +161,7 @@ if CFG.Active.GlobalAc then
         end)
     end
 
+    -- [[ ANTI REMOVE ENTITY ]] --
     if CFG.Active.RemoveEntity then
         function DeleteSafeVehicle(entity)
             local entityId = GetSafeVehicleId(entity)
@@ -173,5 +174,46 @@ if CFG.Active.GlobalAc then
                 onGuard.TriggerServer('onGuard:detect:entityRemove')
             end
         end
+    end
+
+    -- [[ ANTI TAZE PLAYER ]] --
+    if CFG.Active.TazePlayer then
+        local tazerWeaponHash = GetHashKey('WEAPON_STUNGUN')
+
+        function isTazer(weaponHash)
+            return weaponHash == tazerWeaponHash
+        end
+
+        function isDistanceLegit(attackerPed, victimPed)
+            local attackerPos = GetEntityCoords(attackerPed)
+            local victimPos = GetEntityCoords(victimPed)
+            local distance = #(attackerPos - victimPos)
+
+            return distance <= 10
+        end
+
+        AddEventHandler('gameEventTriggered', function(eventName, eventData)
+            if eventName == 'CEventNetworkEntityDamage' then
+                local attacker = eventData[1]
+                local victim = eventData[2]
+                local weaponHash = eventData[7]
+
+                if isTazer(weaponHash) then
+                    local attackerPed = GetPlayerPed(attacker)
+                    local victimPed = GetPlayerPed(victim)
+
+                    if HasPedGotWeapon(attackerPed, tazerWeaponHash, false) then
+                        if isDistanceLegit(attackerPed, victimPed) then
+                        else
+                            TriggerServerEvent('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
+                            CancelEvent()
+                        end
+                    else
+                        TriggerServerEvent('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
+                        CancelEvent()
+                    end
+                end
+            end
+        end)
     end
 end

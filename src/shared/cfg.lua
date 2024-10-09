@@ -9,7 +9,8 @@ CFG.Active = {
     GodMod = true,
     Invisible = true,
     VehicleInvisible = true,
-    AntiTriggersEvent = true
+    AntiTriggersEvent = true,
+    TazePlayer = true
 }
 
 CFG.Frame = 1000

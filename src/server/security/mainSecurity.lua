@@ -9,6 +9,7 @@ if CFG.Active.GlobalAc then
             ' [' ..
             src ..
             '] (' .. ide .. ') Attempt to God Mod.')
+        DropPlayer(src, 'Attempt to GodMod')
     end)
 
     onGuard.OnNet('onGuard:detect:invisible', function()
@@ -21,6 +22,7 @@ if CFG.Active.GlobalAc then
             ' [' ..
             src ..
             '] (' .. ide .. ') Attempt to InvisibleMod.')
+        DropPlayer(src, 'Attempt to InvisibleMod')
     end)
 
     onGuard.OnNet('onGuard:detect:entitySpawn', function()
@@ -31,6 +33,7 @@ if CFG.Active.GlobalAc then
         LOG.OnGuard('Player => ' ..
             name ..
             ' [' .. src .. '] (' .. ide .. ') Attempt to spawn entity (vehicle).')
+        DropPlayer(src, 'Attempt to spawn entity (vehicle)')
     end)
 
     onGuard.OnNet('onGuard:detect:entityRemove', function()
@@ -42,7 +45,8 @@ if CFG.Active.GlobalAc then
             name ..
             ' [' ..
             src ..
-            '] (' .. ide .. ') Attempt to RemoveE ntity.')
+            '] (' .. ide .. ') Attempt to Remove Entity.')
+        DropPlayer(src, 'Attempt to Remove Entity')
     end)
 
     onGuard.OnNet('onGuard:detect:vehicleInvisible', function()
@@ -55,6 +59,20 @@ if CFG.Active.GlobalAc then
             ' [' ..
             src ..
             '] (' .. ide .. ') Attempt to InvisibleMod for vehicle.')
+        DropPlayer(src, 'Attempt to InvisibleMod for vehicle')
+    end)
+
+    onGuard.OnNet('onGuard:detect:tazePlayer', function(id)
+        local src = source;
+        local name = GetPlayerName(src);
+        local ide = GetPlayerIdentifierByType(src, 'license');
+
+        LOG.OnGuard('Player => ' ..
+            name ..
+            ' [' ..
+            src ..
+            '] (' .. ide .. ') Attempt to Taze Player.')
+        DropPlayer(id, 'Attempt to Taze Player')
     end)
     --
 end
