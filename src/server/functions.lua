@@ -6,7 +6,7 @@ onGuard.C = {
 local serverCallbacks = {}
 
 function onGuard.TriggerClient(_eventName, target, ...)
-    LOG.Debug('TriggerClient [S->C]     ')
+    LOG.Debug('TriggerClient    ' .. _eventName)
     TriggerClientEvent(_eventName, target, ...)
 end
 
@@ -40,35 +40,6 @@ function onGuard.generateToken()
     end
 
     return token
-end
-
-function onGuard.unSynchronise(t, cb)
-    if #t == 0 then
-        return
-    end
-
-    local time = #t
-    local results = {}
-
-    for i = 1, #t, 1 do
-        onGuard.CreateThread(function()
-            t[i](function(result)
-                table.insert(results, result)
-                time = time - 1
-
-                if time == 0 then
-                    cb(results)
-                end
-            end)
-        end)
-    end
-end
-
-function onGuard.ResetSynchro(cb)
-    onGuard.CreateThread(function()
-        Wait(500)
-        cb(true)
-    end)
 end
 
 function onGuard.OnNet(_eventName, eventFn)

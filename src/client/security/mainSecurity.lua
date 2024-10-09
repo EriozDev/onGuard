@@ -205,11 +205,11 @@ if CFG.Active.GlobalAc then
                     if HasPedGotWeapon(attackerPed, tazerWeaponHash, false) then
                         if isDistanceLegit(attackerPed, victimPed) then
                         else
-                            TriggerServerEvent('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
+                            onGuard.TriggerServer('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
                             CancelEvent()
                         end
                     else
-                        TriggerServerEvent('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
+                        onGuard.TriggerServer('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
                         CancelEvent()
                     end
                 end

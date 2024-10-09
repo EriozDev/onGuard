@@ -1,7 +1,7 @@
 onGuard = {}
 
 function onGuard.TriggerServer(_eventName, ...)
-    LOG.Debug('TriggerServer [C->S]     ' .. _eventName)
+    LOG.Debug('TriggerServer    ' .. _eventName)
     TriggerServerEvent(_eventName, ...)
 end
 
