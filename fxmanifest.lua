@@ -11,7 +11,6 @@ Version("0.1.0")
 shared_scripts {
     'src/shared/cfg.lua',
     'src/shared/libs/log.lua',
-    'src/shared/libs/interneEvent.lua'
 }
 
 client_scripts {
@@ -25,6 +24,7 @@ client_scripts {
 }
 
 server_scripts {
+    '@onGuard/src/server/functions.lua',
     '@mysql-async/lib/MySQL.lua',
     'src/server/functions.lua',
     'src/server/entity.lua',

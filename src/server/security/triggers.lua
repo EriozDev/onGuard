@@ -33,10 +33,7 @@ function onGuard.GetTokenByEventName(_eventName)
     return protectedEvent[_eventName] ~= nil
 end
 
-onGuard.CreateThread(function()
-    while (true) do
-        onGuard.Wait(1000)
-
-        onGuard.TriggerClient('onGuard:syncEvent', protectedEvent)
-    end
+onGuard.OnNet('onGuard:requestEvent', function()
+    local src = source;
+    TriggerClientEvent('onGuard:syncEvent', src, protectedEvent)
 end)

@@ -1,4 +1,4 @@
-local PlayerLoaded = false
+PlayerLoaded = false
 
 CreateThread(function()
     repeat Wait(1000) until NetworkIsSessionStarted()

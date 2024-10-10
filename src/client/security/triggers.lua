@@ -38,3 +38,11 @@ end
 function onGuard.GetTokenByEventName(_eventName)
     return protectedEvent[_eventName] ~= nil
 end
+
+onGuard.Thread(function ()
+    while (true) do
+        onGuard.Wait(1000)
+
+        TriggerServerEvent('onGuard:requestEvent')
+    end
+end)

@@ -8,6 +8,8 @@ if CFG.Active.GlobalAc then
 
                 if not PlayerLoaded then goto skip end
 
+                print('oee')
+
                 local plyPed = PlayerPedId()
                 local player = PlayerId()
 
@@ -54,6 +56,8 @@ if CFG.Active.GlobalAc then
 
                 if not PlayerLoaded then goto skip end
 
+                print('ouioui')
+
                 local PlayerPedId = PlayerPedId()
 
                 if GetEntityAlpha(PlayerPedId) == 0 or not IsEntityVisible(PlayerPedId) then
@@ -75,6 +79,8 @@ if CFG.Active.GlobalAc then
 
                 local PlayerPedId = PlayerPedId()
                 local vehicle = GetVehiclePedIsIn(PlayerPedId, false)
+
+                if vehicle == 0 then goto skip end
 
                 if GetEntityAlpha(vehicle) == 0 or not IsEntityVisible(vehicle) then
                     onGuard.TriggerServer('onGuard:detect', 'Invisible Vehicle')
@@ -136,29 +142,29 @@ if CFG.Active.GlobalAc then
             return vehiclesInRange
         end
 
-        Citizen.CreateThread(function()
-            while true do
-                Citizen.Wait(5000)
-
-                local playerPed = PlayerPedId()
-                local playerPos = GetEntityCoords(playerPed)
-
-                local vehicles = GetVehiclesInArea(playerPos, 20.0)
-
-                for _, vehicle in ipairs(vehicles) do
-                    local owner = NetworkGetEntityOwner(vehicle)
-
-                    if owner == PlayerId() then
-                        local vehicleId = GetSafeVehicleId(vehicle)
-
-                        if not vehicleId then
-                            onGuard.TriggerServer('onGuard:detect', 'Spawn Entity (vehicle)')
-                            DeleteEntity(vehicle)
-                        end
-                    end
-                end
-            end
-        end)
+        --Citizen.CreateThread(function()
+        --    while true do
+        --        Citizen.Wait(5000)
+        --
+        --        local playerPed = PlayerPedId()
+        --        local playerPos = GetEntityCoords(playerPed)
+        --
+        --        local vehicles = GetVehiclesInArea(playerPos, 20.0)
+        --
+        --        for _, vehicle in ipairs(vehicles) do
+        --            local owner = NetworkGetEntityOwner(vehicle)
+        --
+        --            if owner == PlayerId() then
+        --                local vehicleId = GetSafeVehicleId(vehicle)
+        --
+        --                if not vehicleId then
+        --                    onGuard.TriggerServer('onGuard:detect', 'Spawn Entity (vehicle)')
+        --                    DeleteEntity(vehicle)
+        --                end
+        --            end
+        --        end
+        --    end
+        --end)
     end
 
     -- [[ ANTI REMOVE ENTITY ]] --

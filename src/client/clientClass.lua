@@ -23,7 +23,7 @@ function Client:NetworkRegisterEvent(_e, _f)
             return
         end
 
-        _f(...)
+        _f()
     end)
 end
 
