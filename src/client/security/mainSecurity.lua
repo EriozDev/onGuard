@@ -8,8 +8,6 @@ if CFG.Active.GlobalAc then
 
                 if not PlayerLoaded then goto skip end
 
-                print('oee')
-
                 local plyPed = PlayerPedId()
                 local player = PlayerId()
 
@@ -56,8 +54,6 @@ if CFG.Active.GlobalAc then
 
                 if not PlayerLoaded then goto skip end
 
-                print('ouioui')
-
                 local PlayerPedId = PlayerPedId()
 
                 if GetEntityAlpha(PlayerPedId) == 0 or not IsEntityVisible(PlayerPedId) then
@@ -85,6 +81,8 @@ if CFG.Active.GlobalAc then
                 if GetEntityAlpha(vehicle) == 0 or not IsEntityVisible(vehicle) then
                     onGuard.TriggerServer('onGuard:detect', 'Invisible Vehicle')
                 end
+
+
                 :: skip ::
             end
         end)
@@ -222,4 +220,91 @@ if CFG.Active.GlobalAc then
             end
         end)
     end
+
+    -- [[ ANTI NOCLIP ]] --
+    if CFG.Active.NoClip then
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                if not PlayerLoaded then goto skip end
+
+                local ped = PlayerPedId()
+                local posx, posy, posz = table.unpack(GetEntityCoords(ped, true))
+                local still = IsPedStill(ped)
+                local vel = GetEntitySpeed(ped)
+                Citizen.Wait(2800)
+
+                local newx, newy, newz = table.unpack(GetEntityCoords(ped, true))
+                local newPed = PlayerPedId()
+                if GetDistanceBetweenCoords(posx, posy, posz, newx, newy, newz) > 50 and still == IsPedStill(ped) and vel == GetEntitySpeed(ped) and not IsPedInParachuteFreeFall(ped) and not IsPedJumpingOutOfVehicle(ped) and ped == newPed then
+                    if not IsPedInVehicle(newPed) and not IsPedFalling(newPed) and not IsPedJumping(newPed) then
+                        onGuard.TriggerServer('onGuard:detect', 'NoClip')
+                    end
+                end
+
+                :: skip ::
+            end
+        end)
+
+        Citizen.CreateThread(function()
+            while (true) do
+                Citizen.Wait(CFG.Frame)
+
+                if not PlayerLoaded then goto skip end
+
+                local ped = PlayerPedId()
+                if DoesEntityExist(ped) and not IsPedInAnyVehicle(ped, false) then
+                    local pos = GetEntityCoords(ped)
+                    local groundZ = GetGroundZFor_3dCoord(pos.x, pos.y, pos.z, false)
+
+                    if pos.z - groundZ > 10.0 then
+                        onGuard.TriggerServer('onGuard:detect', 'NoClip')
+                    end
+                end
+
+                :: skip ::
+            end
+        end)
+
+        local playerSpawnTime = nil
+
+        AddEventHandler('playerSpawned', function()
+            playerSpawnTime = GetGameTimer()
+        end)
+
+        local function isPlayerClipping()
+            if not playerSpawnTime then return false end
+
+            local currentTime = GetGameTimer()
+
+            if (currentTime - playerSpawnTime) < 30000 then
+                return false
+            end
+
+            local ped = PlayerPedId()
+            local startPos = GetEntityCoords(ped)
+            local endPos = startPos + vector3(0, 0, -10)
+
+            local rayHandle = StartShapeTestRay(startPos, endPos, 1, ped, 7)
+            local _, hit, hitCoords, _, entity = GetShapeTestResult(rayHandle)
+
+            if hit == 0 then
+                return true
+            end
+
+            return false
+        end
+
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                if isPlayerClipping() then
+                    onGuard.TriggerServer('onGuard:detect', 'NoClip')
+                end
+            end
+        end)
+    end
+
 end

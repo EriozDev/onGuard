@@ -22,7 +22,6 @@ AddEventHandler('playerDropped', function(reason)
 end)
 
 onGuard.Thread(function()
-    onGuard.Wait(1500)
     for i = 1, GetNumResources() do
         local resourceName = GetResourceByFindIndex(i)
 
@@ -31,6 +30,8 @@ onGuard.Thread(function()
             LOG.OnGuard(('=> Protect resource ^4%s^0'):format(resourceName))
         end
     end
+
+    LOG.OnGuard(('^1OnGuard - Anticheat^3 protects the server!^0'):format(resourceName))
 end)
 
 for i = 1, GetNumResources() do
