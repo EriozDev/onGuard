@@ -46,6 +46,10 @@ function onGuard.OnNet(_eventName, eventFn)
     RegisterNetEvent(_eventName, eventFn)
 end
 
+function onGuard.KickPlayer(id, reason)
+    DropPlayer(id, 'you are permanently banned by onGuard Anticheat for ' .. reason)
+end
+
 ---@param eventName string
 ---@param callback function
 function onGuard.RegisterServerCallback(eventName, callback)

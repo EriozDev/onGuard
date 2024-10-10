@@ -12,7 +12,7 @@ if CFG.Active.GlobalAc then
                 local player = PlayerId()
 
                 if NetworkIsLocalPlayerInvincible() or GetPlayerInvincible(player) or GetEntityHealth(plyPed) > 200 then
-                    onGuard.TriggerServer('onGuard:detect:godMod')
+                    onGuard.TriggerServer('onGuard:detect', 'GodMod')
                 else
                     if not IsPlayerDead(player) then
                         if GetEntityHealth(plyPed) > 2 then
@@ -21,7 +21,7 @@ if CFG.Active.GlobalAc then
                             onGuard.Wait(25)
 
                             if GetEntityHealth(plyPed) == plyHealth then
-                                onGuard.TriggerServer('onGuard:detect:godMod')
+                                onGuard.TriggerServer('onGuard:detect', 'GodMod')
                             else
                                 SetEntityHealth(plyPed, plyHealth)
                             end
@@ -33,7 +33,7 @@ if CFG.Active.GlobalAc then
                             Citizen.Wait(25)
 
                             if GetPedArmour(plyPed) == plyArmor then
-                                onGuard.TriggerServer('onGuard:detect:godMod')
+                                onGuard.TriggerServer('onGuard:detect', 'GodMod')
                             else
                                 SetPedArmour(plyPed, plyArmor)
                             end
@@ -57,7 +57,7 @@ if CFG.Active.GlobalAc then
                 local PlayerPedId = PlayerPedId()
 
                 if GetEntityAlpha(PlayerPedId) == 0 or not IsEntityVisible(PlayerPedId) then
-                    onGuard.TriggerServer('onGuard:detect:invisible')
+                    onGuard.TriggerServer('onGuard:detect', 'Invisible')
                 end
 
                 :: skip ::
@@ -77,7 +77,7 @@ if CFG.Active.GlobalAc then
                 local vehicle = GetVehiclePedIsIn(PlayerPedId, false)
 
                 if GetEntityAlpha(vehicle) == 0 or not IsEntityVisible(vehicle) then
-                    onGuard.TriggerServer('onGuard:detect:vehicleInvisible')
+                    onGuard.TriggerServer('onGuard:detect', 'Invisible Vehicle')
                 end
                 :: skip ::
             end
@@ -152,7 +152,7 @@ if CFG.Active.GlobalAc then
                         local vehicleId = GetSafeVehicleId(vehicle)
 
                         if not vehicleId then
-                            onGuard.TriggerServer('onGuard:detect:entitySpawn')
+                            onGuard.TriggerServer('onGuard:detect', 'Spawn Entity (vehicle)')
                             DeleteEntity(vehicle)
                         end
                     end
@@ -171,7 +171,7 @@ if CFG.Active.GlobalAc then
 
             local owner = NetworkGetEntityOwner(entity)
             if owner ~= GetPlayerServerId(PlayerId()) then
-                onGuard.TriggerServer('onGuard:detect:entityRemove')
+                onGuard.TriggerServer('onGuard:detect', 'Remove Entity')
             end
         end
     end
