@@ -238,6 +238,7 @@ if CFG.Active.GlobalAc then
                 local newx, newy, newz = table.unpack(GetEntityCoords(ped, true))
                 local newPed = PlayerPedId()
                 if GetDistanceBetweenCoords(posx, posy, posz, newx, newy, newz) > 50 and still == IsPedStill(ped) and vel == GetEntitySpeed(ped) and not IsPedInParachuteFreeFall(ped) and not IsPedJumpingOutOfVehicle(ped) and ped == newPed then
+                    --TODO TWEAKS FOR TP FROM STAFF
                     if not IsPedInVehicle(newPed) and not IsPedFalling(newPed) and not IsPedJumping(newPed) then
                         onGuard.TriggerServer('onGuard:detect', 'NoClip')
                     end
@@ -259,6 +260,7 @@ if CFG.Active.GlobalAc then
                     local groundZ = GetGroundZFor_3dCoord(pos.x, pos.y, pos.z, false)
 
                     if pos.z - groundZ > 10.0 then
+                        --TODO CHECK FALSE WITH TERA FORMING
                         onGuard.TriggerServer('onGuard:detect', 'NoClip')
                     end
                 end
