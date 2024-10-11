@@ -4,14 +4,13 @@ CFG.DEVMOD = true -- Don't tuch
 -- [[ DETECTIONS ]] --
 CFG.Active = {
     GlobalAc = true,
-    SpawnEntity = true,
-    RemoveEntity = true,
     GodMod = true,
     NoClip = true,
     Invisible = true,
     VehicleInvisible = true,
     AntiTriggersEvent = true,
-    TazePlayer = true
+    TazePlayer = true,
+    PlateChanger = true
 }
 
 CFG.Frame = 1000

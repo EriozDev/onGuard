@@ -1,3 +1,3 @@
-CreateVehicle = CreateSafeVehicle
-DeleteVehicle = DeleteSafeVehicle
-DeleteEntity = DeleteSafeVehicle
+--CreateVehicle = CreateSafeVehicle
+--DeleteVehicle = DeleteSafeVehicle
+--DeleteEntity = DeleteSafeVehicle

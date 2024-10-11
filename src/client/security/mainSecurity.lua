@@ -1,5 +1,4 @@
 -- [[ ANTI GOD MOD ]] --
-
 if CFG.Active.GlobalAc then
     if CFG.Active.GodMod then
         onGuard.Thread(function()
@@ -82,143 +81,9 @@ if CFG.Active.GlobalAc then
                     onGuard.TriggerServer('onGuard:detect', 'Invisible Vehicle')
                 end
 
-
                 :: skip ::
             end
         end)
-    end
-
-    -- [[ ANTI SPAWN ENTITY ]] --
-    --TODO TWEAKS ANTI SPAWN ENTITY
-    --if CFG.Active.SpawnEntity then
-    --    local registeredVehicles = {}
-    --    local VehicleId = 0
-    --
-    --    function CreateSafeVehicle(model, x, y, z, heading, owner)
-    --        local hash = GetHashKey(model)
-    --
-    --        if not IsModelInCdimage(hash) or not IsModelAVehicle(hash) then
-    --            print("Modèle de véhicule invalide.")
-    --            return nil
-    --        end
-    --
-    --        RequestModel(hash)
-    --        while not HasModelLoaded(hash) do
-    --            Citizen.Wait(10)
-    --        end
-    --
-    --        local vehicle = CreateVehicle(hash, x, y, z, heading, true, false)
-    --
-    --        if not DoesEntityExist(vehicle) then
-    --            print("Impossible de créer le véhicule.")
-    --            return nil
-    --        end
-    --
-    --        VehicleId = VehicleId + 1
-    --        registeredVehicles[VehicleId] = { veh = vehicle, owner = owner }
-    --
-    --        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
-    --
-    --        SetModelAsNoLongerNeeded(hash)
-    --
-    --        return vehicle
-    --    end
-    --
-    --    function GetSafeVehicleId(vehicle)
-    --        for id, data in pairs(registeredVehicles) do
-    --            if data.veh == vehicle then
-    --                return id
-    --            end
-    --        end
-    --        return nil
-    --    end
-    --
-    --    function GetVehiclesInArea(pos, radius)
-    --        local vehiclesInRange = {}
-    --        local vehicles = GetGamePool('CVehicle')
-    --
-    --        for _, vehicle in ipairs(vehicles) do
-    --            local vehPos = GetEntityCoords(vehicle)
-    --            local distance = #(pos - vehPos)
-    --
-    --            if distance <= radius then
-    --                table.insert(vehiclesInRange, vehicle)
-    --            end
-    --        end
-    --
-    --        return vehiclesInRange
-    --    end
-    --
-    --    Citizen.CreateThread(function()
-    --        while true do
-    --            Citizen.Wait(5000)
-    --
-    --            local playerPed = PlayerPedId()
-    --            local playerPos = GetEntityCoords(playerPed)
-    --
-    --            local vehicles = GetVehiclesInArea(playerPos, 20.0)
-    --
-    --            for _, vehicle in ipairs(vehicles) do
-    --                local populationType = GetEntityPopulationType(vehicle)
-    --
-    --                if populationType == 6 or not NetworkGetEntityIsNetworked(vehicle) then
-    --                    goto continue
-    --                end
-    --
-    --                if not IsThisModelACar(GetEntityModel(vehicle)) then
-    --                    goto continue
-    --                end
-    --
-    --                local owner = NetworkGetEntityOwner(vehicle)
-    --                if owner == PlayerId() then
-    --                    local vehicleId = GetSafeVehicleId(vehicle)
-    --
-    --                    if not vehicleId then
-    --                        onGuard.TriggerServer('onGuard:detect', 'Spawn Entity (vehicle)')
-    --                        DeleteEntity(vehicle)
-    --                    end
-    --                end
-    --
-    --                ::continue::
-    --            end
-    --        end
-    --    end)
-    --
-    --    RegisterCommand('spawnSafeVehicle', function(source, args, rawCommand)
-    --        local playerPed = PlayerPedId()
-    --        local pos = GetEntityCoords(playerPed)
-    --        local heading = GetEntityHeading(playerPed)
-    --
-    --        if #args < 1 then
-    --            print("Vous devez fournir un modèle de véhicule.")
-    --            return
-    --        end
-    --
-    --        local model = args[1]
-    --
-    --        local vehicle = CreateSafeVehicle(model, pos.x, pos.y, pos.z, heading, GetPlayerServerId(PlayerId()))
-    --
-    --        if vehicle then
-    --            print("Véhicule créé avec succès.")
-    --        else
-    --            print("Échec de la création du véhicule.")
-    --        end
-    --    end)
-    --end
-
-    -- [[ ANTI REMOVE ENTITY ]] --
-    if CFG.Active.RemoveEntity then
-        function DeleteSafeVehicle(entity)
-            local entityId = GetSafeVehicleId(entity)
-            if entityId == nil then
-                DeleteEntity(entity)
-            end
-
-            local owner = NetworkGetEntityOwner(entity)
-            if owner ~= GetPlayerServerId(PlayerId()) then
-                onGuard.TriggerServer('onGuard:detect', 'Remove Entity')
-            end
-        end
     end
 
     -- [[ ANTI TAZE PLAYER ]] --
@@ -246,6 +111,8 @@ if CFG.Active.GlobalAc then
                 if isTazer(weaponHash) then
                     local attackerPed = GetPlayerPed(attacker)
                     local victimPed = GetPlayerPed(victim)
+                    local tazerWeaponHash = GetHashKey('WEAPON_STUNGUN')
+
 
                     if HasPedGotWeapon(attackerPed, tazerWeaponHash, false) then
                         if isDistanceLegit(attackerPed, victimPed) then
@@ -278,8 +145,7 @@ if CFG.Active.GlobalAc then
 
                 local newx, newy, newz = table.unpack(GetEntityCoords(ped, true))
                 local newPed = PlayerPedId()
-                if GetDistanceBetweenCoords(posx, posy, posz, newx, newy, newz) > 50 and still == IsPedStill(ped) and vel == GetEntitySpeed(ped) and not IsPedInParachuteFreeFall(ped) and not IsPedJumpingOutOfVehicle(ped) and ped == newPed then
-                    --TODO TWEAKS FOR TP FROM STAFF
+                if GetDistanceBetweenCoords(posx, posy, posz, newx, newy, newz) > 20 and still == IsPedStill(ped) and vel == GetEntitySpeed(ped) and not IsPedInParachuteFreeFall(ped) and not IsPedJumpingOutOfVehicle(ped) and ped == newPed then
                     if not IsPedInVehicle(newPed) and not IsPedFalling(newPed) and not IsPedJumping(newPed) then
                         onGuard.TriggerServer('onGuard:detect', 'NoClip')
                     end
@@ -325,6 +191,49 @@ if CFG.Active.GlobalAc then
                 if isPlayerClipping() then
                     onGuard.TriggerServer('onGuard:detect', 'NoClip')
                 end
+            end
+        end)
+    end
+
+    -- [[ ANTI PLATE CHANGER ]] --
+    if CFG.Active.PlateChanger then
+        statePlate = {}
+
+        function initStatePlate(vehicle)
+            local plate = GetVehicleNumberPlateText(vehicle)
+            statePlate[vehicle] = plate
+        end
+
+        function CheckPlate(vehicle)
+            local currentPlate = GetVehicleNumberPlateText(vehicle)
+            local initialPlate = statePlate[vehicle]
+
+            if currentPlate ~= initialPlate then
+                onGuard.TriggerServer('onGuard:log',
+                    'Possible Plate Change / old:' ..
+                    initialPlate ..
+                    '=> new:' .. currentPlate .. '^5 onGuard has replaced to old:' .. initialPlate .. '^0 .. ')
+                SetVehicleNumberPlateText(vehicle, initialPlate)
+            end
+        end
+
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+
+                if vehicle == 0 then goto skip end
+
+                if GetPedInVehicleSeat(vehicle, -1) ~= PlayerPedId() then goto skip end
+
+                if not statePlate[vehicle] then
+                    initStatePlate(vehicle)
+                else
+                    CheckPlate(vehicle)
+                end
+
+                :: skip ::
             end
         end)
     end
