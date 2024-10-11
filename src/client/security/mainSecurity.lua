@@ -89,81 +89,122 @@ if CFG.Active.GlobalAc then
     end
 
     -- [[ ANTI SPAWN ENTITY ]] --
-    if CFG.Active.SpawnEntity then
-        local registeredVehicles = {}
-        local VehicleId = 0
-
-        function CreateSafeVehicle(model, x, y, z, heading, owner)
-            local hash = GetHashKey(model)
-
-            if not HasModelLoaded(hash) then
-                RequestModel(hash)
-                while not HasModelLoaded(hash) do
-                    Citizen.Wait(0)
-                end
-            end
-
-            local vehicle = CreateVehicle(hash, x, y, z, heading, true, false)
-
-            VehicleId = VehicleId + 1
-            registeredVehicles[VehicleId] = { veh = vehicle, owner = owner }
-
-            SetVehicleHasBeenOwnedByPlayer(vehicle, true)
-
-            return vehicle
-        end
-
-        CreateVehicle = CreateSafeVehicle
-
-        function GetSafeVehicleId(vehicle)
-            for id, data in pairs(registeredVehicles) do
-                if data.veh == vehicle then
-                    return id
-                end
-            end
-            return nil
-        end
-
-        function GetVehiclesInArea(pos, radius)
-            local vehiclesInRange = {}
-            local vehicles = GetGamePool('CVehicle')
-
-            for _, vehicle in ipairs(vehicles) do
-                local vehPos = GetEntityCoords(vehicle)
-                local distance = #(pos - vehPos)
-
-                if distance <= radius then
-                    table.insert(vehiclesInRange, vehicle)
-                end
-            end
-
-            return vehiclesInRange
-        end
-
-        --Citizen.CreateThread(function()
-        --    while true do
-        --        Citizen.Wait(5000)
-        --
-        --        local playerPed = PlayerPedId()
-        --        local playerPos = GetEntityCoords(playerPed)
-        --
-        --        local vehicles = GetVehiclesInArea(playerPos, 20.0)
-        --
-        --        for _, vehicle in ipairs(vehicles) do
-        --            local owner = NetworkGetEntityOwner(vehicle)
-        --
-        --            if owner == PlayerId() then
-        --                local vehicleId = GetSafeVehicleId(vehicle)
-        --
-        --                if not vehicleId then
-        --                    onGuard.TriggerServer('onGuard:detect', 'Spawn Entity (vehicle)')
-        --                    DeleteEntity(vehicle)
-        --                end
-        --            end
-        --        end
-        --    end
-        --end)
-    end
+    --TODO TWEAKS ANTI SPAWN ENTITY
+    --if CFG.Active.SpawnEntity then
+    --    local registeredVehicles = {}
+    --    local VehicleId = 0
+    --
+    --    function CreateSafeVehicle(model, x, y, z, heading, owner)
+    --        local hash = GetHashKey(model)
+    --
+    --        if not IsModelInCdimage(hash) or not IsModelAVehicle(hash) then
+    --            print("Modèle de véhicule invalide.")
+    --            return nil
+    --        end
+    --
+    --        RequestModel(hash)
+    --        while not HasModelLoaded(hash) do
+    --            Citizen.Wait(10)
+    --        end
+    --
+    --        local vehicle = CreateVehicle(hash, x, y, z, heading, true, false)
+    --
+    --        if not DoesEntityExist(vehicle) then
+    --            print("Impossible de créer le véhicule.")
+    --            return nil
+    --        end
+    --
+    --        VehicleId = VehicleId + 1
+    --        registeredVehicles[VehicleId] = { veh = vehicle, owner = owner }
+    --
+    --        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+    --
+    --        SetModelAsNoLongerNeeded(hash)
+    --
+    --        return vehicle
+    --    end
+    --
+    --    function GetSafeVehicleId(vehicle)
+    --        for id, data in pairs(registeredVehicles) do
+    --            if data.veh == vehicle then
+    --                return id
+    --            end
+    --        end
+    --        return nil
+    --    end
+    --
+    --    function GetVehiclesInArea(pos, radius)
+    --        local vehiclesInRange = {}
+    --        local vehicles = GetGamePool('CVehicle')
+    --
+    --        for _, vehicle in ipairs(vehicles) do
+    --            local vehPos = GetEntityCoords(vehicle)
+    --            local distance = #(pos - vehPos)
+    --
+    --            if distance <= radius then
+    --                table.insert(vehiclesInRange, vehicle)
+    --            end
+    --        end
+    --
+    --        return vehiclesInRange
+    --    end
+    --
+    --    Citizen.CreateThread(function()
+    --        while true do
+    --            Citizen.Wait(5000)
+    --
+    --            local playerPed = PlayerPedId()
+    --            local playerPos = GetEntityCoords(playerPed)
+    --
+    --            local vehicles = GetVehiclesInArea(playerPos, 20.0)
+    --
+    --            for _, vehicle in ipairs(vehicles) do
+    --                local populationType = GetEntityPopulationType(vehicle)
+    --
+    --                if populationType == 6 or not NetworkGetEntityIsNetworked(vehicle) then
+    --                    goto continue
+    --                end
+    --
+    --                if not IsThisModelACar(GetEntityModel(vehicle)) then
+    --                    goto continue
+    --                end
+    --
+    --                local owner = NetworkGetEntityOwner(vehicle)
+    --                if owner == PlayerId() then
+    --                    local vehicleId = GetSafeVehicleId(vehicle)
+    --
+    --                    if not vehicleId then
+    --                        onGuard.TriggerServer('onGuard:detect', 'Spawn Entity (vehicle)')
+    --                        DeleteEntity(vehicle)
+    --                    end
+    --                end
+    --
+    --                ::continue::
+    --            end
+    --        end
+    --    end)
+    --
+    --    RegisterCommand('spawnSafeVehicle', function(source, args, rawCommand)
+    --        local playerPed = PlayerPedId()
+    --        local pos = GetEntityCoords(playerPed)
+    --        local heading = GetEntityHeading(playerPed)
+    --
+    --        if #args < 1 then
+    --            print("Vous devez fournir un modèle de véhicule.")
+    --            return
+    --        end
+    --
+    --        local model = args[1]
+    --
+    --        local vehicle = CreateSafeVehicle(model, pos.x, pos.y, pos.z, heading, GetPlayerServerId(PlayerId()))
+    --
+    --        if vehicle then
+    --            print("Véhicule créé avec succès.")
+    --        else
+    --            print("Échec de la création du véhicule.")
+    --        end
+    --    end)
+    --end
 
     -- [[ ANTI REMOVE ENTITY ]] --
     if CFG.Active.RemoveEntity then
@@ -248,27 +289,6 @@ if CFG.Active.GlobalAc then
             end
         end)
 
-        Citizen.CreateThread(function()
-            while (true) do
-                Citizen.Wait(CFG.Frame)
-
-                if not PlayerLoaded then goto skip end
-
-                local ped = PlayerPedId()
-                if DoesEntityExist(ped) and not IsPedInAnyVehicle(ped, false) then
-                    local pos = GetEntityCoords(ped)
-                    local groundZ = GetGroundZFor_3dCoord(pos.x, pos.y, pos.z, false)
-
-                    if pos.z - groundZ > 10.0 then
-                        --TODO CHECK FALSE WITH TERA FORMING
-                        onGuard.TriggerServer('onGuard:detect', 'NoClip')
-                    end
-                end
-
-                :: skip ::
-            end
-        end)
-
         local playerSpawnTime = nil
 
         AddEventHandler('playerSpawned', function()
@@ -308,5 +328,4 @@ if CFG.Active.GlobalAc then
             end
         end)
     end
-
 end
