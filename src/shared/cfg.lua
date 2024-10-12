@@ -11,7 +11,8 @@ CFG.Active = {
     VehicleInvisible = true,
     AntiTriggersEvent = true,
     TazePlayer = true,
-    PlateChanger = true
+    PlateChanger = true,
+    SpawnExplosion = true
 }
 
 CFG.Frame = 1000

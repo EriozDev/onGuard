@@ -11,7 +11,7 @@ if CFG.Active.GlobalAc then
                 local player = PlayerId()
 
                 if NetworkIsLocalPlayerInvincible() or GetPlayerInvincible(player) or GetEntityHealth(plyPed) > 200 then
-                    onGuard.TriggerServer('onGuard:detect', 'GodMod')
+                    onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'GodMod')
                 else
                     if not IsPlayerDead(player) then
                         if GetEntityHealth(plyPed) > 2 then
@@ -20,7 +20,7 @@ if CFG.Active.GlobalAc then
                             onGuard.Wait(25)
 
                             if GetEntityHealth(plyPed) == plyHealth then
-                                onGuard.TriggerServer('onGuard:detect', 'GodMod')
+                                onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'GodMod')
                             else
                                 SetEntityHealth(plyPed, plyHealth)
                             end
@@ -32,7 +32,7 @@ if CFG.Active.GlobalAc then
                             Citizen.Wait(25)
 
                             if GetPedArmour(plyPed) == plyArmor then
-                                onGuard.TriggerServer('onGuard:detect', 'GodMod')
+                                onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'GodMod')
                             else
                                 SetPedArmour(plyPed, plyArmor)
                             end
@@ -56,7 +56,7 @@ if CFG.Active.GlobalAc then
                 local PlayerPedId = PlayerPedId()
 
                 if GetEntityAlpha(PlayerPedId) == 0 or not IsEntityVisible(PlayerPedId) then
-                    onGuard.TriggerServer('onGuard:detect', 'Invisible')
+                    onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'Invisible')
                 end
 
                 :: skip ::
@@ -78,7 +78,7 @@ if CFG.Active.GlobalAc then
                 if vehicle == 0 then goto skip end
 
                 if GetEntityAlpha(vehicle) == 0 or not IsEntityVisible(vehicle) then
-                    onGuard.TriggerServer('onGuard:detect', 'Invisible Vehicle')
+                    onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'Invisible Vehicle')
                 end
 
                 :: skip ::
@@ -117,11 +117,11 @@ if CFG.Active.GlobalAc then
                     if HasPedGotWeapon(attackerPed, tazerWeaponHash, false) then
                         if isDistanceLegit(attackerPed, victimPed) then
                         else
-                            onGuard.TriggerServer('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
+                            onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(attacker), 'Attempt to Taze Player')
                             CancelEvent()
                         end
                     else
-                        onGuard.TriggerServer('onGuard:detect:tazePlayer', GetPlayerServerId(attacker))
+                        onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(attacker), 'Attempt to Taze Player')
                         CancelEvent()
                     end
                 end
@@ -147,7 +147,7 @@ if CFG.Active.GlobalAc then
                 local newPed = PlayerPedId()
                 if GetDistanceBetweenCoords(posx, posy, posz, newx, newy, newz) > 20 and still == IsPedStill(ped) and vel == GetEntitySpeed(ped) and not IsPedInParachuteFreeFall(ped) and not IsPedJumpingOutOfVehicle(ped) and ped == newPed then
                     if not IsPedInVehicle(newPed) and not IsPedFalling(newPed) and not IsPedJumping(newPed) then
-                        onGuard.TriggerServer('onGuard:detect', 'NoClip')
+                        onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'NoClip')
                     end
                 end
 
@@ -189,7 +189,7 @@ if CFG.Active.GlobalAc then
                 onGuard.Wait(CFG.Frame)
 
                 if isPlayerClipping() then
-                    onGuard.TriggerServer('onGuard:detect', 'NoClip')
+                    onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'NoClip')
                 end
             end
         end)
@@ -204,7 +204,7 @@ if CFG.Active.GlobalAc then
                 if not PlayerLoaded then goto skip end
 
                 if #(GetFinalRenderedCamCoord() - GetEntityCoords(PlayerPedId())) > 100 then
-                    onGuard.TriggerServer("onGuard:detect", 'FreeCam')
+                    onGuard.TriggerServer("onGuard:detect", GetPlayerServerId(PlayerId()), 'FreeCam')
                 end
 
                 :: skip ::
@@ -226,7 +226,7 @@ if CFG.Active.GlobalAc then
             local initialPlate = statePlate[vehicle]
 
             if currentPlate ~= initialPlate then
-                onGuard.TriggerServer('onGuard:log',
+                onGuard.TriggerServer('onGuard:log', GetPlayerServerId(PlayerId()),
                     'Possible Plate Change / old:' ..
                     initialPlate ..
                     '=> new:' .. currentPlate .. '^5 onGuard has replaced to old:' .. initialPlate .. '^0 .. ')
@@ -254,4 +254,20 @@ if CFG.Active.GlobalAc then
             end
         end)
     end
+
+    RegisterNetEvent('onGuard:getExplosiveWeapon')
+    AddEventHandler('onGuard:getExplosiveWeapon', function(validExplosiveWeapons, cb)
+        local playerPed = PlayerPedId()
+
+        for _, weaponName in ipairs(validExplosiveWeapons) do
+            local weaponHash = GetHashKey(weaponName)
+            if HasPedGotWeapon(playerPed, weaponHash, false) then
+                cb(true)
+                return
+            end
+        end
+
+        cb(false)
+    end)
+
 end
