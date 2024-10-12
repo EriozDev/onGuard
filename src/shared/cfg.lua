@@ -6,6 +6,7 @@ CFG.Active = {
     GlobalAc = true,
     GodMod = true,
     NoClip = true,
+    FreeCam = true,
     Invisible = true,
     VehicleInvisible = true,
     AntiTriggersEvent = true,

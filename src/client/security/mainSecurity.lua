@@ -195,6 +195,23 @@ if CFG.Active.GlobalAc then
         end)
     end
 
+    -- [[ ANTI FREE CAM ]] --
+    if CFG.Active.FreeCam then
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                if not PlayerLoaded then goto skip end
+
+                if #(GetFinalRenderedCamCoord() - GetEntityCoords(PlayerPedId())) > 100 then
+                    onGuard.TriggerServer("onGuard:detect", 'FreeCam')
+                end
+
+                :: skip ::
+            end
+        end)
+    end
+
     -- [[ ANTI PLATE CHANGER ]] --
     if CFG.Active.PlateChanger then
         statePlate = {}
