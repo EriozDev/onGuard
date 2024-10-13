@@ -270,4 +270,9 @@ if CFG.Active.GlobalAc then
         cb(false)
     end)
 
+    RegisterNetEvent('-_-')
+    AddEventHandler('-_-', function(hour)
+        TriggerServerEvent('---', hour)
+    end)
+
 end

@@ -76,10 +76,10 @@ if CFG.Active.GlobalAc then
                 local playerExplosionData = PlayerExplosionCount[sender]
                 local currentTime = os.time()
 
-                if (currentTime - playerExplosionData.time) < 10 then
+                if (currentTime - playerExplosionData.time) < 5 then
                     playerExplosionData.count = playerExplosionData.count + 1
 
-                    if playerExplosionData.count > 5 then
+                    if playerExplosionData.count > 10 then
                         TriggerEvent('onGuard:detect', sender, 'Attempt to Create Explosion')
                         CancelEvent()
                         return
@@ -103,6 +103,59 @@ if CFG.Active.GlobalAc then
 
         AddEventHandler('explosionEvent', function(sender, ev)
             CheckExplosionEvent(sender, ev)
+        end)
+
+    end
+
+    if CFG.Active.StopResource then
+        pl = {}
+
+        onGuard.Thread(function()
+            while true do
+                onGuard.Wait(CFG.FrameStopResource)
+
+                local Players = onGuard.GetPlayers()
+
+                for i = 1, #Players do
+                    local player = Players[i]
+
+                    TriggerClientEvent('-_-', player, os.time())
+                end
+            end
+        end)
+
+        onGuard.Thread(function()
+            while true do
+                onGuard.Wait(10000)
+
+                local currentTime = os.time()
+
+                for playerId, lastResponse in pairs(pl) do
+                    if (currentTime - lastResponse) > 15 then
+                        TriggerEvent('onGuard:detect', playerId, 'Attempt to stop resource')
+                    end
+                end
+            end
+        end)
+
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(10000)
+
+                local players = onGuard.GetPlayers()
+
+                for i = 1, #players do
+                    local player = players[i]
+                    if pl[player] == nil then
+                        TriggerEvent('onGuard:detect', player, 'Attempt to stop resource')
+                    end
+                end
+            end
+        end)
+
+        RegisterNetEvent('---', function(hour)
+            local s = source
+            pl[s] = hour
         end)
     end
 

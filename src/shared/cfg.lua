@@ -12,8 +12,10 @@ CFG.Active = {
     AntiTriggersEvent = true,
     TazePlayer = true,
     PlateChanger = true,
-    SpawnExplosion = true
+    SpawnExplosion = true,
+    StopResource = true
 }
 
 CFG.Frame = 1000
 CFG.FrameGodMod = 60000
+CFG.FrameStopResource = 3000
