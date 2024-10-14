@@ -13,7 +13,8 @@ CFG.Active = {
     TazePlayer = true,
     PlateChanger = true,
     SpawnExplosion = true,
-    StopResource = true
+    StopResource = true,
+    SuperJump = true
 }
 
 CFG.Frame = 1000

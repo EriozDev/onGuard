@@ -275,4 +275,36 @@ if CFG.Active.GlobalAc then
         TriggerServerEvent('---', hour)
     end)
 
+    -- [[ ANTI SUPER JUMP ]] --
+    if CFG.Active.SuperJump then
+        local superJumpThreshold = 3.0
+
+        function IsPlayerUsingSuperJump()
+            local ped = GetPlayerPed(-1)
+            local _, _, z1 = table.unpack(GetEntityCoords(ped, true))
+            Wait(200)
+            local _, _, z2 = table.unpack(GetEntityCoords(ped, true))
+
+            local heightDifference = z2 - z1
+            print(heightDifference)
+
+            return heightDifference > superJumpThreshold
+        end
+
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(500)
+
+                if GetVehiclePedIsIn(PlayerPedId(), false) ~= 0 then goto skip end
+
+                if IsPedJumping(PlayerPedId()) then
+                    if IsPlayerUsingSuperJump() then
+                        onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'SuperJump')
+                    end
+                end
+
+                :: skip ::
+            end
+        end)
+    end
 end
