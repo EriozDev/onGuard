@@ -59,6 +59,10 @@ function Client:getClientUniqueId()
     return (self.uniqueid);
 end
 
+function Client:NetworkOnEvent(_e, _f)
+    AddEventHandler(_e, _f())
+end
+
 function Client:destroy()
     table.wipe(self)
 end
