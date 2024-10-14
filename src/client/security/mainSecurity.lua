@@ -286,7 +286,6 @@ if CFG.Active.GlobalAc then
             local _, _, z2 = table.unpack(GetEntityCoords(ped, true))
 
             local heightDifference = z2 - z1
-            print(heightDifference)
 
             return heightDifference > superJumpThreshold
         end
