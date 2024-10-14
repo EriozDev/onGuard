@@ -26,7 +26,6 @@ onGuard.OnNet('onGuard:state:init', function(k, v)
     onGuard.Entity[k] = v
 end)
 
-
 onGuard.OnNet('onGuard:state:set', function(key, value)
     if onGuard.Entity[key] == nil then
         return
