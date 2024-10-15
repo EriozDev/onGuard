@@ -1,6 +1,11 @@
 if CFG.Active.GlobalAc then
     onGuard.OnNet('onGuard:detect', function(id, reason)
-        onGuard.KickPlayer(id, 'Attempt to ' .. reason)
+        local player = onGuard.GetPlayer(id)
+        if not player then
+            return
+        end
+
+        player:kick('you are permanently banned by onGuard Anticheat for Attempt to ' .. reason)
     end)
 
     onGuard.OnNet('onGuard:log', function(detection)

@@ -8,17 +8,15 @@ end)
 RegisterNetEvent('onGuard:PlayerJoin', function()
     local src = source
 
-    PlayerInGame[src] = true
+    PlayerManager.AddPlayer(src)
     LOG.Info('Player Joining...')
     TriggerEvent('onGuard:PlayerLoaded', src)
 end)
 
 AddEventHandler('playerDropped', function(reason)
     local src = source
-    if (PlayerInGame[src]) then
-        PlayerInGame[src] = nil
-        LOG.Info('Player Dropped! ', src)
-    end
+    PlayerManager.RemovePlayer(src)
+    LOG.Info('Player Dropped! ', src)
 end)
 
 onGuard.Thread(function()
