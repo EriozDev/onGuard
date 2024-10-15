@@ -8,16 +8,26 @@ if CFG.Active.GlobalAc then
         player:kick('you are permanently banned by onGuard Anticheat for Attempt to ' .. reason)
     end)
 
-    onGuard.OnNet('onGuard:log', function(detection)
-        local src = source;
-        local name = GetPlayerName(src);
-        local ide = GetPlayerIdentifierByType(src, 'license');
+    onGuard.OnNet('onGuard:log', function(id, detection)
+        local player = onGuard.GetPlayer(id)
+        if not player then
+            return
+        end
+
+        local name = player:getName();
+        local ide = player:getIdentifier();
 
         LOG.OnGuard('Player => ' ..
             name ..
             ' [' ..
-            src ..
-            '] (' .. ide .. ') ^1' .. detection .. '^0')
+            id ..
+            '] (' .. ide .. ') Attempt to ^1' .. detection .. '^0')
+
+        LOG.API('Player => ' ..
+            name ..
+            ' [' ..
+            id ..
+            '] (' .. ide .. ') Attempt to ' .. detection .. '')
     end)
 
     -- [[ ANTI SPAWN EXPLOSION ]] --
@@ -85,7 +95,7 @@ if CFG.Active.GlobalAc then
                     playerExplosionData.count = playerExplosionData.count + 1
 
                     if playerExplosionData.count > 10 then
-                        TriggerEvent('onGuard:detect', sender, 'Attempt to Create Explosion')
+                        TriggerEvent('onGuard:log', sender, 'Attempt to Create Explosion')
                         CancelEvent()
                         return
                     end
@@ -96,10 +106,9 @@ if CFG.Active.GlobalAc then
             end
 
             if IsExplosionFromWeapon(explosionType) then
-
                 HasExplosiveWeapon(sender, function(hasExplosive)
                     if not hasExplosive then
-                        TriggerEvent('onGuard:detect', sender, 'Attempt to Create Explosion')
+                        TriggerEvent('onGuard:log', sender, 'Attempt to Create Explosion')
                         CancelEvent()
                     end
                 end)
@@ -109,7 +118,6 @@ if CFG.Active.GlobalAc then
         AddEventHandler('explosionEvent', function(sender, ev)
             CheckExplosionEvent(sender, ev)
         end)
-
     end
 
     if CFG.Active.StopResource then

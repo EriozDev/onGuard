@@ -1,5 +1,41 @@
--- [[ ANTI GOD MOD ]] --
 if CFG.Active.GlobalAc then
+    -- [[ ANTI SPAWN VEHICLE BY SERVER ]] --
+    if CFG.Active.BlacklistVehicle then
+        onGuard.Thread(function()
+            for _, vehicle in pairs(CFG.BlacklistVehicle) do
+                local hash = GetHashKey(vehicle)
+                SetVehicleModelIsSuppressed(hash, true)
+            end
+
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+            end
+        end)
+
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                local playerPed = PlayerPedId()
+                local vehicle = GetVehiclePedIsIn(playerPed, false)
+
+                if vehicle == 0 then goto skip end
+                local hash = GetEntityModel(vehicle)
+                local vehicleName = GetDisplayNameFromVehicleModel(hash)
+
+                for _, blockedVehicle in pairs(CFG.BlacklistVehicle) do
+                    if vehicleName == blockedVehicle then
+                        DeleteEntity(vehicle)
+                        onGuard.TriggerServer('onGuard:log', GetPlayerServerId(PlayerId()), 'Blacklist Vehicle => ' .. vehicleName)
+                    end
+                end
+
+                :: skip ::
+            end
+        end)
+    end
+
+    -- [[ ANTI GOD MOD ]] --
     if CFG.Active.GodMod then
         onGuard.Thread(function()
             while (true) do
@@ -227,9 +263,9 @@ if CFG.Active.GlobalAc then
 
             if currentPlate ~= initialPlate then
                 onGuard.TriggerServer('onGuard:log', GetPlayerServerId(PlayerId()),
-                    'Possible Plate Change / old:' ..
+                    ' Possible Plate Change. oldPlate: ' ..
                     initialPlate ..
-                    '=> new:' .. currentPlate .. '^5 onGuard has replaced to old:' .. initialPlate .. '^0 .. ')
+                    ' => new: ' .. currentPlate .. ' onGuard has replaced to old: ' .. initialPlate)
                 SetVehicleNumberPlateText(vehicle, initialPlate)
             end
         end
@@ -298,7 +334,7 @@ if CFG.Active.GlobalAc then
 
                 if IsPedJumping(PlayerPedId()) then
                     if IsPlayerUsingSuperJump() then
-                        onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'SuperJump')
+                        onGuard.TriggerServer('onGuard:log', GetPlayerServerId(PlayerId()), 'SuperJump')
                     end
                 end
 

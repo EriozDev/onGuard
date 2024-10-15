@@ -41,3 +41,23 @@ function LOG.Error(error, ...)
 
     print('[^1ERROR] ', error, ...)
 end
+
+function LOG.API(message)
+    if message == nil or message == '' then
+        return false
+    end
+
+    local embeds = {
+        {
+            ['title'] = message,
+            ['type'] = 'rich',
+            ['color'] = 16711680,
+            ['footer'] = {
+                ['text'] = 'onGuard AntiCheat'
+            }
+        }
+    }
+
+    PerformHttpRequest(CFG.Webhook, function() end, 'POST', json.encode({ username = 'onGuard AntiCheat', embeds = embeds }),
+        { ['Content-Type'] = 'application/json' })
+end
