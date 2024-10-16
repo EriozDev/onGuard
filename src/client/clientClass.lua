@@ -2,6 +2,8 @@
 Client = {}
 Idx = 0
 
+cl = {}
+
 function Client.Init(clientId)
     local self = {};
 
@@ -11,8 +13,15 @@ function Client.Init(clientId)
     self.uniqueid = Idx;
     self.__ = {};
 
+    cl[self.client] = self
+
     LOG.Debug('Client was init successfully!')
     return (self);
+end
+
+---@param id number
+function GetClient(id)
+    return cl[id] ~= nil
 end
 
 ---@param _e string
