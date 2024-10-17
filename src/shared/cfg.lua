@@ -15,7 +15,8 @@ CFG.Active = {
     PlateChanger = true,
     SpawnExplosion = true,
     StopResource = true,
-    SuperJump = true
+    SuperJump = true,
+    FastRun = true
 }
 
 CFG.Webhook =

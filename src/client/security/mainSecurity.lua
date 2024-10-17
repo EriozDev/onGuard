@@ -342,4 +342,24 @@ if CFG.Active.GlobalAc then
             end
         end)
     end
+
+    -- [[ ANTI FAST RUN ]] --
+    if CFG.Active.FastRun then
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+
+                if GetVehiclePedIsIn(PlayerPedId()) ~= 0 then goto skip end
+
+                if IsPedRunning(PlayerPedId()) then
+                    if GetEntitySpeed(PlayerPedId()) > 8.0 then
+                        onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'Fast Run')
+                    end
+                end
+
+                :: skip ::
+            end
+        end)
+    end
+
 end
