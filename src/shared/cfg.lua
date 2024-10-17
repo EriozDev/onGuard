@@ -5,6 +5,7 @@ CFG.DEVMOD = true -- Don't tuch
 CFG.Active = {
     GlobalAc = true,
     BlacklistVehicle = true,
+    BlacklistPed = true,
     GodMod = true,
     NoClip = true,
     FreeCam = true,
@@ -28,4 +29,9 @@ CFG.FrameStopResource = 3000
 
 CFG.BlacklistVehicle = {     -- ALL MAJ FOR MODEL
     -- 'HYDRA'
+}
+
+CFG.BlacklistPed = {
+    ['a_c_chimp'] = true,
+    ['a_c_pig'] = true,
 }

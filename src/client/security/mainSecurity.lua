@@ -1,5 +1,5 @@
 if CFG.Active.GlobalAc then
-    -- [[ ANTI SPAWN VEHICLE BY SERVER ]] --
+    -- [[ ANTI SPAWN VEHICLE BY SERVER AND BLACKLIST ]] --
     if CFG.Active.BlacklistVehicle then
         onGuard.Thread(function()
             for _, vehicle in pairs(CFG.BlacklistVehicle) do
@@ -31,6 +31,19 @@ if CFG.Active.GlobalAc then
                 end
 
                 :: skip ::
+            end
+        end)
+    end
+
+    -- [[ BLACKLIST PED ]] --
+    if CFG.Active.BlacklistPed then
+        AddEventHandler('populationPedCreating', function(_M)
+            if _M == 0 then
+                return
+            end
+
+            if CFG.BlacklistPed[_M] then
+                CancelEvent()
             end
         end)
     end
