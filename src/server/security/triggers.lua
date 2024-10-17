@@ -9,8 +9,14 @@ function onGuard.RegisterEvent(_eventName, _eventFunction)
 
     RegisterNetEvent(_eventName, function(token, ...)
         local src = source;
-        local name = GetPlayerName(src);
-        local ide = GetPlayerIdentifierByType(src, 'license');
+        local player = onGuard.GetPlayer(src)
+        if not player then
+            return
+        end
+
+
+        local name = player:getName();
+        local ide = player:getIdentifier();
         if token ~= protectedEvent[_eventName] then
             protectedEvent[_eventName] = onGuard.generateToken()
             LOG.OnGuard('Player => ' ..
@@ -18,6 +24,7 @@ function onGuard.RegisterEvent(_eventName, _eventFunction)
                 ' [' ..
                 src ..
                 '] (' .. ide .. ') Attempt to execute trigger: ' .. _eventName)
+            player:kick('Attempt to execute trigger: ' .. _eventName)
             onGuard.TriggerClient('onGuard:syncEvent', protectedEvent)
             CancelEvent()
         else
