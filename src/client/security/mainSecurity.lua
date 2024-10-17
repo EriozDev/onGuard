@@ -204,6 +204,16 @@ if CFG.Active.GlobalAc then
             end
         end)
 
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(CFG.Frame)
+                if GetEntityCoords(GetPlayerPed(-1)).z - GetFinalRenderedCamCoord().z == 0 then
+                    Wait(3000)
+                    onGuard.TriggerServer('onGuard:detect', GetPlayerServerId(PlayerId()), 'NoClip')
+                end
+            end
+        end)
+
         local playerSpawnTime = nil
 
         AddEventHandler('playerSpawned', function()
