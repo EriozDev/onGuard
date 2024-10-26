@@ -17,7 +17,8 @@ CFG.Active = {
     SpawnExplosion = true,
     StopResource = true,
     SuperJump = true,
-    FastRun = true
+    FastRun = true,
+    Aimbot = true -- BETA
 }
 
 CFG.Webhook =

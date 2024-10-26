@@ -385,4 +385,32 @@ if CFG.Active.GlobalAc then
         end)
     end
 
+    -- [[ ANTI AIMBOT ]] --
+    if CFG.Active.Aimbot then
+        onGuard.Thread(function()
+            while (true) do
+                onGuard.Wait(500)
+
+                local playerPed = PlayerPedId()
+
+                if GetVehiclePedIsIn(playerPed) ~= 0 then goto skip end
+
+                local _, hit, hitPos, _, hitEntity = GetEntityPlayerIsFreeAimingAt(PlayerId())
+                local isAimingAtPed = hit and IsEntityAPed(hitEntity)
+
+                if isAimingAtPed then
+                    local aimingBone = GetPedBoneIndex(hitEntity, 31086)
+                    local boneCoords = GetWorldPositionOfEntityBone(hitEntity, aimingBone)
+                    local aimingAccuracy = #(boneCoords - hitPos)
+
+                    if aimingAccuracy < 0.1 then
+                        TriggerServerEvent("onGuard:aimDetection", aimingAccuracy, hitEntity)
+                    end
+                end
+
+                :: skip ::
+            end
+        end)
+    end
+
 end

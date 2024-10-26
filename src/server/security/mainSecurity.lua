@@ -172,5 +172,19 @@ if CFG.Active.GlobalAc then
         end)
     end
 
+    -- [[ ANTI AIMBOT ]] --
+    local aimSuspicionLevels = {}
+
+    RegisterNetEvent("onGuard:aimDetection")
+    AddEventHandler("onGuard:aimDetection", function(accuracy, target)
+        local src = source
+        aimSuspicionLevels[src] = (aimSuspicionLevels[src] or 0) + 1
+
+        if aimSuspicionLevels[src] > 10 then
+            TriggerEvent('onGuard:detect', src, 'Attempt to aimbot')
+            aimSuspicionLevels[src] = 0
+        end
+    end)
+
     --
 end
