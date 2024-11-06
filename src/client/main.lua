@@ -7,7 +7,7 @@ CreateThread(function()
 end)
 
 onGuard.OnNet('client:init', function(id)
-    local client = Client.Init(id)
+    --local client = Client.Init(id)
     Wait(15000)
     PlayerLoaded = true
 end)

@@ -178,10 +178,11 @@ if CFG.Active.GlobalAc then
     RegisterNetEvent("onGuard:aimDetection")
     AddEventHandler("onGuard:aimDetection", function(accuracy, target)
         local src = source
+        print(aimSuspicionLevels[src])
         aimSuspicionLevels[src] = (aimSuspicionLevels[src] or 0) + 1
 
         if aimSuspicionLevels[src] > 10 then
-            TriggerEvent('onGuard:detect', src, 'Attempt to aimbot')
+            DropPlayer(src, 'Vous avez été déconnecter par le système anti-triche du serveur pour potentiel désynchronisation ou cheat.')
             aimSuspicionLevels[src] = 0
         end
     end)

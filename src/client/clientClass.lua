@@ -13,7 +13,7 @@ function Client.Init(clientId)
     self.uniqueid = Idx;
     self.__ = {};
 
-    cl[self.client] = self
+    cl[clientId] = self
 
     LOG.Debug('Client was init successfully!')
     return (self);
